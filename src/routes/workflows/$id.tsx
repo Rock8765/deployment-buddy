@@ -111,14 +111,17 @@ function WorkflowDetailPage() {
           <h1 className="mt-3 text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
             {meta.name}
           </h1>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{meta.desc}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted-foreground">
             <span className="rounded-md bg-muted px-1.5 py-0.5">{meta.nodes} nodes</span>
-            {meta.triggers.map((t) => (
-              <span key={t} className="rounded-md bg-muted px-1.5 py-0.5">
-                trigger: {t}
+            <span className="rounded-md bg-muted px-1.5 py-0.5">trigger: {meta.triggerType}</span>
+            {meta.services.map((s) => (
+              <span key={s} className="rounded-md bg-accent px-1.5 py-0.5 text-accent-foreground">
+                {s}
               </span>
             ))}
           </div>
+
         </div>
 
         <div className="flex flex-col gap-2.5">
