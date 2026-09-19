@@ -40,6 +40,7 @@ function WorkflowDetailPage() {
   });
 
   const [copied, setCopied] = useState(false);
+  const [showJson, setShowJson] = useState(false);
 
   const detail = meta && fileQuery.data ? buildDetail(meta, fileQuery.data) : null;
 
@@ -159,6 +160,37 @@ function WorkflowDetailPage() {
         </ol>
       </section>
 
+      {/* Raw JSON viewer */}
+      <section className="mt-8">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Workflow JSON
+          </h2>
+          {fileQuery.data && (
+            <button
+              onClick={() => setShowJson((s) => !s)}
+              className="font-mono text-[11px] text-primary hover:underline"
+            >
+              {showJson ? "Hide JSON ↑" : "Show full JSON ↓"}
+            </button>
+          )}
+        </div>
+        {fileQuery.isLoading && (
+          <div className="mt-4 h-24 animate-pulse rounded-xl bg-card" />
+        )}
+        {fileQuery.data && showJson && (
+          <pre className="mt-3 max-h-[600px] overflow-auto rounded-xl border border-border bg-card p-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
+            {JSON.stringify(fileQuery.data, null, 2)}
+          </pre>
+        )}
+        {fileQuery.data && !showJson && (
+          <p className="mt-3 rounded-xl border border-border bg-card px-4 py-3 font-mono text-[11px] text-muted-foreground">
+            The complete workflow JSON — exactly as distributed — is ready to copy or download
+            above.
+          </p>
+        )}
+      </section>
+
       {/* Nodes */}
       <section className="mt-8 pb-16">
         <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -198,6 +230,18 @@ function Shell({ children }: { children: React.ReactNode }) {
             </span>
             <span className="text-sm font-semibold tracking-tight">AI Workflow Hub</span>
           </Link>
+          <nav className="flex items-center gap-5 text-sm text-muted-foreground">
+            <Link to="/guide" className="transition-colors hover:text-foreground">
+              Guide
+            </Link>
+            <a
+              href="/AI-Workflow-Hub-2000.zip"
+              download
+              className="transition-colors hover:text-foreground"
+            >
+              Download all ⤓
+            </a>
+          </nav>
         </div>
       </header>
       <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
