@@ -55,5 +55,3 @@ export function PortalHeader() {
     </header>
   );
 }
-
-import { signOut as signOutFn } from "@/lib/auth.functions";
