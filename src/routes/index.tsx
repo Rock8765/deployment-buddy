@@ -63,14 +63,26 @@ function Index() {
               </span>
               <span className="text-sm font-semibold tracking-tight">AI Workflow Hub</span>
             </div>
-            <a
-              href="https://n8n.io"
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              What is n8n? →
-            </a>
+            <nav className="flex items-center justify-end gap-5 text-sm text-muted-foreground">
+              <Link to="/guide" className="transition-colors hover:text-foreground">
+                Guide
+              </Link>
+              <a
+                href="/AI-Workflow-Hub-2000.zip"
+                download
+                className="transition-colors hover:text-foreground"
+              >
+                Download all ⤓
+              </a>
+              <a
+                href="https://n8n.io"
+                target="_blank"
+                rel="noreferrer"
+                className="transition-colors hover:text-foreground"
+              >
+                What is n8n? →
+              </a>
+            </nav>
           </nav>
 
           <div className="mt-16 max-w-3xl">
