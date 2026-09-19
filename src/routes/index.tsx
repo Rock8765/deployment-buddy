@@ -329,13 +329,14 @@ function WorkflowCard({ w, catLabel }: { w: WorkflowMeta; catLabel: string }) {
         </div>
       )}
 
-      <p className="mt-4 text-xs text-muted-foreground">{w.cat.replace(/-/g, " ")}</p>
+      <p className="mt-4 text-xs font-medium text-muted-foreground">{catLabel}</p>
 
       <Link
         to="/workflows/$id"
         params={{ id: w.id }}
         className="mt-4 block rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
       >
+
         📋 View details &amp; copy
       </Link>
     </div>
