@@ -19,11 +19,33 @@ export const Route = createFileRoute("/")({
         content:
           "Search 2000+ ready-to-import n8n automation workflows — AI agents, email, e-commerce, CRM, scraping and more.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
 
-const PAGE_SIZE = 48;
+const PAGE_SIZE = 12;
+
+const COMPLEXITY_LABEL: Record<string, string> = {
+  simple: "Simple",
+  medium: "Medium",
+  complex: "Complex",
+};
+
+const TRIGGER_LABEL: Record<string, string> = {
+  manual: "Manual",
+  scheduled: "Scheduled",
+  triggered: "Triggered",
+  webhook: "Webhook",
+};
+
+const TRIGGER_ICON: Record<string, string> = {
+  manual: "🖐",
+  scheduled: "⏰",
+  triggered: "⚡",
+  webhook: "🔗",
+};
 
 function Index() {
   const { data, isLoading, isError } = useQuery({
@@ -33,136 +55,127 @@ function Index() {
   });
 
   const [query, setQuery] = useState("");
-  const [cat, setCat] = useState<string | null>(null);
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [cat, setCat] = useState("");
+  const [complexity, setComplexity] = useState("");
+  const [trigger, setTrigger] = useState("");
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     if (!data) return [];
     const q = query.trim().toLowerCase();
     return data.items.filter((w) => {
       if (cat && w.cat !== cat) return false;
+      if (complexity && w.complexity !== complexity) return false;
+      if (trigger && w.triggerType !== trigger) return false;
       if (!q) return true;
-      return w.name.toLowerCase().includes(q);
+      return (
+        w.name.toLowerCase().includes(q) ||
+        w.services.some((s) => s.toLowerCase().includes(q))
+      );
     });
-  }, [data, query, cat]);
+  }, [data, query, cat, complexity, trigger]);
 
-  const shown = filtered.slice(0, visible);
-  const aiCount = data ? data.items.filter((w) => w.ai).length : 0;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount);
+  const shown = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
+
+  function reset<T>(setter: (v: T) => void) {
+    return (v: T) => {
+      setter(v);
+      setPage(1);
+    };
+  }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <header className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 bg-grid" aria-hidden />
-        <div className="absolute inset-0 glow-primary" aria-hidden />
-        <div className="relative mx-auto max-w-6xl px-6 pt-10 pb-16">
-          <nav className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <span className="flex size-8 items-center justify-center rounded-lg bg-primary font-mono text-sm font-medium text-primary-foreground">
-                n8
-              </span>
-              <span className="text-sm font-semibold tracking-tight">AI Workflow Hub</span>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="mx-auto max-w-6xl px-6 py-10">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 text-center">
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                🤖 AI Workflow Hub
+              </h1>
+              <p className="mx-auto mt-3 max-w-2xl text-base text-muted-foreground">
+                {data ? data.total.toLocaleString() : "2000"}+ free n8n AI automation workflows.
+                Discover, copy and use them in your own projects.
+              </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-sm text-muted-foreground">
+                <span>✅ Completely Free</span>
+                <span>🚀 Ready to Import</span>
+                <span>🤖 AI Powered</span>
+              </div>
             </div>
-            <nav className="flex items-center justify-end gap-5 text-sm text-muted-foreground">
-              <Link to="/guide" className="transition-colors hover:text-foreground">
-                Guide
+            <div className="flex shrink-0 flex-col items-end gap-2 text-sm">
+              <Link
+                to="/guide"
+                className="rounded-lg border border-border px-3 py-1.5 font-medium transition-colors hover:border-ring hover:text-primary"
+              >
+                📘 Guide
               </Link>
               <a
                 href="/AI-Workflow-Hub-2000.zip"
                 download
-                className="transition-colors hover:text-foreground"
+                className="rounded-lg bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
-                Download all ⤓
+                ⤓ Download all
               </a>
-              <a
-                href="https://n8n.io"
-                target="_blank"
-                rel="noreferrer"
-                className="transition-colors hover:text-foreground"
-              >
-                What is n8n? →
-              </a>
-            </nav>
-          </nav>
-
-          <div className="mt-16 max-w-3xl">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
-              {data ? `${data.total} workflows` : "Loading library"}
-            </p>
-            <h1 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
-              Free n8n workflows,
-              <br />
-              <span className="text-primary">ready to import.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              A curated library of {data ? data.total.toLocaleString() : "2,000"}+ automation
-              workflows — {aiCount.toLocaleString()}+ of them AI-powered. Find one, copy the JSON,
-              import it into your n8n dashboard in seconds.
-            </p>
-          </div>
-
-          {/* Search */}
-          <div className="mt-10 max-w-2xl">
-            <div className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 shadow-lg shadow-black/20 focus-within:border-ring">
-              <svg
-                className="size-5 shrink-0 text-muted-foreground"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
-                />
-              </svg>
-              <input
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setVisible(PAGE_SIZE);
-                }}
-                placeholder="Search workflows — try “gmail”, “stripe”, “telegram”…"
-                className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-              />
-              {query && (
-                <button
-                  onClick={() => setQuery("")}
-                  className="shrink-0 font-mono text-xs text-muted-foreground hover:text-foreground"
-                >
-                  clear
-                </button>
-              )}
             </div>
           </div>
-
-          {/* Category chips */}
-          {data && (
-            <div className="no-scrollbar mt-6 flex gap-2 overflow-x-auto pb-1">
-              <Chip active={cat === null} onClick={() => setCat(null)} count={data.total}>
-                All
-              </Chip>
-              {data.categories.map((c) => (
-                <Chip
-                  key={c.id}
-                  active={cat === c.id}
-                  count={c.count}
-                  onClick={() => {
-                    setCat(cat === c.id ? null : c.id);
-                    setVisible(PAGE_SIZE);
-                  }}
-                >
-                  {c.label}
-                </Chip>
-              ))}
-            </div>
-          )}
         </div>
       </header>
 
-      {/* Grid */}
-      <main className="mx-auto max-w-6xl px-6 py-12">
+      <main className="mx-auto max-w-6xl px-6 py-8">
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <Stat icon="📊" value={data?.total} label="Total Workflows" tone="blue" />
+          <Stat icon="🤖" value={data?.aiCount} label="AI Workflows" tone="green" />
+          <Stat icon="🔗" value={data?.totalNodes} label="Total Nodes" tone="purple" />
+          <Stat icon="🔌" value={data?.integrationCount} label="Integrations" tone="orange" />
+        </div>
+
+        {/* Filters */}
+        <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Field label="🔍 Search">
+              <input
+                value={query}
+                onChange={(e) => reset(setQuery)(e.target.value)}
+                placeholder="Search workflow, integration..."
+                className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
+              />
+            </Field>
+            <Field label="📂 Category">
+              <Select value={cat} onChange={reset(setCat)}>
+                <option value="">All Categories</option>
+                {data?.categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.label} ({c.count})
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="📊 Complexity">
+              <Select value={complexity} onChange={reset(setComplexity)}>
+                <option value="">All Levels</option>
+                <option value="simple">Simple</option>
+                <option value="medium">Medium</option>
+                <option value="complex">Complex</option>
+              </Select>
+            </Field>
+            <Field label="⚡ Trigger">
+              <Select value={trigger} onChange={reset(setTrigger)}>
+                <option value="">All Types</option>
+                <option value="manual">Manual</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="triggered">Triggered</option>
+                <option value="webhook">Webhook</option>
+              </Select>
+            </Field>
+          </div>
+        </div>
+
+        {/* Results */}
         {isLoading && <GridSkeleton />}
 
         {isError && (
@@ -173,44 +186,37 @@ function Index() {
 
         {data && (
           <>
-            <div className="mb-6 flex items-baseline justify-between">
-              <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                {cat ? data.categories.find((c) => c.id === cat)?.label : "All workflows"}
-              </h2>
-              <p className="font-mono text-xs text-muted-foreground">
-                {filtered.length.toLocaleString()} result{filtered.length === 1 ? "" : "s"}
-              </p>
-            </div>
+            <p className="mt-8 text-sm text-muted-foreground">
+              {filtered.length.toLocaleString()} workflows found (page {current} / {pageCount})
+            </p>
 
             {filtered.length === 0 ? (
               <p className="py-20 text-center text-sm text-muted-foreground">
-                No workflows match “{query}”. Try a service name like gmail, slack or stripe.
+                No workflows match these filters. Try a service name like gmail, slack or stripe.
               </p>
             ) : (
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {shown.map((w) => (
-                  <WorkflowCard key={w.id + w.file} w={w} />
+                  <WorkflowCard
+                    key={w.file}
+                    w={w}
+                    catLabel={data.categories.find((c) => c.id === w.cat)?.label ?? w.cat}
+                  />
+
                 ))}
               </div>
             )}
 
-            {visible < filtered.length && (
-              <div className="mt-10 text-center">
-                <button
-                  onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                  className="rounded-lg bg-secondary px-6 py-3 text-sm font-medium text-secondary-foreground transition-colors hover:bg-muted"
-                >
-                  Load more ({(filtered.length - visible).toLocaleString()} remaining)
-                </button>
-              </div>
+            {pageCount > 1 && (
+              <Pagination page={current} pageCount={pageCount} onChange={setPage} />
             )}
           </>
         )}
       </main>
 
-      <footer className="border-t border-border py-8">
+      <footer className="border-t border-border bg-card py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 text-xs text-muted-foreground sm:flex-row">
-          <p className="font-mono">AI Workflow Hub — free for personal & commercial use</p>
+          <p>AI Workflow Hub — free for personal &amp; commercial use</p>
           <p>Import via your n8n dashboard: Ctrl/Cmd + I → paste JSON</p>
         </div>
       </footer>
@@ -218,70 +224,189 @@ function Index() {
   );
 }
 
-function Chip({
+const TONES: Record<string, string> = {
+  blue: "bg-blue-50 border-blue-100 text-blue-600",
+  green: "bg-emerald-50 border-emerald-100 text-emerald-600",
+  purple: "bg-purple-50 border-purple-100 text-purple-600",
+  orange: "bg-orange-50 border-orange-100 text-orange-600",
+};
+
+function Stat({
+  icon,
+  value,
+  label,
+  tone,
+}: {
+  icon: string;
+  value: number | undefined;
+  label: string;
+  tone: string;
+}) {
+  return (
+    <div className={`flex items-center gap-3 rounded-xl border p-5 ${TONES[tone]}`}>
+      <span className="text-2xl">{icon}</span>
+      <div>
+        <p className="text-2xl font-bold leading-tight">
+          {value === undefined ? "—" : value.toLocaleString()}
+        </p>
+        <p className="text-xs font-medium text-muted-foreground">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-sm font-medium text-muted-foreground">{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function Select({
+  value,
+  onChange,
+  children,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none transition-colors focus:border-ring"
+    >
+      {children}
+    </select>
+  );
+}
+
+function WorkflowCard({ w, catLabel }: { w: WorkflowMeta; catLabel: string }) {
+  return (
+    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-center justify-between gap-2">
+        <span className="flex items-center gap-2">
+          <span>{w.ai ? "🤖" : "📁"}</span>
+          <span className="rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-foreground">
+            {COMPLEXITY_LABEL[w.complexity]}
+          </span>
+        </span>
+        {w.active && (
+          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600">
+            ✅ Active
+          </span>
+        )}
+      </div>
+
+      <h3 className="mt-3 text-base font-semibold leading-snug tracking-tight">{w.name}</h3>
+      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{w.desc}</p>
+
+      <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+        <span>
+          {TRIGGER_ICON[w.triggerType]} {TRIGGER_LABEL[w.triggerType]}
+        </span>
+        <span>{w.nodes} nodes</span>
+      </div>
+
+      {w.services.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {w.services.slice(0, 4).map((s) => (
+            <span
+              key={s}
+              className="rounded-md bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground"
+            >
+              {s}
+            </span>
+          ))}
+          {w.serviceCount > 4 && (
+            <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+              +{w.serviceCount - 4} more
+            </span>
+          )}
+        </div>
+      )}
+
+      <p className="mt-4 text-xs font-medium text-muted-foreground">{catLabel}</p>
+
+      <Link
+        to="/workflows/$id"
+        params={{ id: w.id }}
+        className="mt-4 block rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+      >
+
+        📋 View details &amp; copy
+      </Link>
+    </div>
+  );
+}
+
+function Pagination({
+  page,
+  pageCount,
+  onChange,
+}: {
+  page: number;
+  pageCount: number;
+  onChange: (p: number) => void;
+}) {
+  const pages: number[] = [];
+  const start = Math.max(1, Math.min(page - 2, pageCount - 4));
+  for (let i = start; i < start + 5 && i <= pageCount; i++) pages.push(i);
+
+  return (
+    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+      <PageBtn disabled={page === 1} onClick={() => onChange(page - 1)}>
+        ← Prev
+      </PageBtn>
+      {start > 1 && <span className="px-1 text-muted-foreground">…</span>}
+      {pages.map((p) => (
+        <PageBtn key={p} active={p === page} onClick={() => onChange(p)}>
+          {p}
+        </PageBtn>
+      ))}
+      {start + 5 <= pageCount && <span className="px-1 text-muted-foreground">…</span>}
+      <PageBtn disabled={page === pageCount} onClick={() => onChange(page + 1)}>
+        Next →
+      </PageBtn>
+    </div>
+  );
+}
+
+function PageBtn({
   active,
-  count,
+  disabled,
   onClick,
   children,
 }: {
-  active: boolean;
-  count: number;
+  active?: boolean;
+  disabled?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
   return (
     <button
+      disabled={disabled}
       onClick={onClick}
       className={
-        "flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors " +
+        "min-w-10 rounded-lg border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40 " +
         (active
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border bg-card text-muted-foreground hover:border-ring hover:text-foreground")
       }
     >
       {children}
-      <span className={active ? "font-mono opacity-80" : "font-mono opacity-60"}>{count}</span>
     </button>
-  );
-}
-
-function WorkflowCard({ w }: { w: WorkflowMeta }) {
-  return (
-    <Link
-      to="/workflows/$id"
-      params={{ id: w.id }}
-      className="group flex flex-col rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-ring"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-sm font-semibold leading-snug tracking-tight group-hover:text-primary">
-          {w.name}
-        </h3>
-        {w.ai && (
-          <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-accent-foreground">
-            AI
-          </span>
-        )}
-      </div>
-      <div className="mt-4 flex items-center gap-2 pt-1 font-mono text-[11px] text-muted-foreground">
-        <span className="rounded-md bg-muted px-1.5 py-0.5">{w.nodes} nodes</span>
-        {w.triggers.slice(0, 2).map((t) => (
-          <span key={t} className="rounded-md bg-muted px-1.5 py-0.5">
-            {t}
-          </span>
-        ))}
-      </div>
-      <p className="mt-auto pt-4 font-mono text-[11px] text-primary opacity-0 transition-opacity group-hover:opacity-100">
-        View & copy JSON →
-      </p>
-    </Link>
   );
 }
 
 function GridSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {Array.from({ length: 9 }).map((_, i) => (
-        <div key={i} className="h-28 animate-pulse rounded-xl bg-card" />
+    <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="h-64 animate-pulse rounded-xl border border-border bg-card" />
       ))}
     </div>
   );

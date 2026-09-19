@@ -6,6 +6,12 @@ export type WorkflowMeta = {
   nodes: number;
   ai: boolean;
   triggers: string[];
+  active: boolean;
+  complexity: "simple" | "medium" | "complex";
+  triggerType: "manual" | "scheduled" | "triggered" | "webhook";
+  services: string[];
+  serviceCount: number;
+  desc: string;
 };
 
 export type WorkflowCategory = {
@@ -16,9 +22,14 @@ export type WorkflowCategory = {
 
 export type WorkflowIndex = {
   total: number;
+  totalNodes: number;
+  activeCount: number;
+  integrationCount: number;
+  aiCount: number;
   categories: WorkflowCategory[];
   items: WorkflowMeta[];
 };
+
 
 export type WorkflowDetail = WorkflowMeta & {
   nodesList: { name: string; type: string }[];
