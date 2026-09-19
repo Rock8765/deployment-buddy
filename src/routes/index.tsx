@@ -197,7 +197,12 @@ function Index() {
             ) : (
               <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {shown.map((w) => (
-                  <WorkflowCard key={w.file} w={w} />
+                  <WorkflowCard
+                    key={w.file}
+                    w={w}
+                    catLabel={data.categories.find((c) => c.id === w.cat)?.label ?? w.cat}
+                  />
+
                 ))}
               </div>
             )}
