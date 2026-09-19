@@ -272,7 +272,7 @@ function WorkflowCard({ w, catLabel }: { w: WorkflowMeta; catLabel: string }) {
           </span>
         </span>
         {w.active && (
-          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600">
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
             ✅ Active
           </span>
         )}
