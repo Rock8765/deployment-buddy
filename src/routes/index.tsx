@@ -214,12 +214,6 @@ function Index() {
         )}
       </main>
 
-      <footer className="border-t border-border bg-card py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 text-xs text-muted-foreground sm:flex-row">
-          <p>AI Workflow Hub — free for personal &amp; commercial use</p>
-          <p>Import via your n8n dashboard: Ctrl/Cmd + I → paste JSON</p>
-        </div>
-      </footer>
     </div>
   );
 }
