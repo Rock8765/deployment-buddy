@@ -258,7 +258,7 @@ function WorkflowCard({ w }: { w: WorkflowMeta }) {
           </span>
         ))}
       </div>
-ript      <p className="mt-auto pt-4 font-mono text-[11px] text-primary opacity-0 transition-opacity group-hover:opacity-100">
+      <p className="mt-auto pt-4 font-mono text-[11px] text-primary opacity-0 transition-opacity group-hover:opacity-100">
         View & copy JSON →
       </p>
     </Link>
