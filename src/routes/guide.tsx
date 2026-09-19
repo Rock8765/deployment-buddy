@@ -197,10 +197,11 @@ function GuidePage() {
       <footer className="border-t border-border py-8">
         <div className="mx-auto max-w-5xl px-6">
           <p className="font-mono text-xs text-muted-foreground">
-            AI Workflow Hub — free for personal & commercial use
+            © {new Date().getFullYear()} Donkm Tech Private Limited — B2B workflow JSON API
           </p>
         </div>
       </footer>
+
     </div>
   );
 }
