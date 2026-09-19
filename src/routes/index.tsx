@@ -201,11 +201,12 @@ function Index() {
 }
 
 const TONES: Record<string, string> = {
-  blue: "bg-blue-50 border-blue-100 text-blue-600",
-  green: "bg-emerald-50 border-emerald-100 text-emerald-600",
-  purple: "bg-purple-50 border-purple-100 text-purple-600",
-  orange: "bg-orange-50 border-orange-100 text-orange-600",
+  blue: "bg-secondary border-border text-primary",
+  green: "bg-accent border-border text-accent-foreground",
+  purple: "bg-secondary border-border text-primary",
+  orange: "bg-accent border-border text-accent-foreground",
 };
+
 
 function Stat({
   icon,

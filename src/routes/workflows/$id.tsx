@@ -233,36 +233,16 @@ function WorkflowDetailPage() {
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary font-mono text-sm font-medium text-primary-foreground">
-              n8
-            </span>
-            <span className="text-sm font-semibold tracking-tight">AI Workflow Hub</span>
-          </Link>
-          <nav className="flex items-center gap-5 text-sm text-muted-foreground">
-            <Link to="/guide" className="transition-colors hover:text-foreground">
-              Guide
-            </Link>
-            <a
-              href="/AI-Workflow-Hub-2000.zip"
-              download
-              className="transition-colors hover:text-foreground"
-            >
-              Download all ⤓
-            </a>
-          </nav>
-        </div>
-      </header>
+      <PortalHeader />
       <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
       <footer className="border-t border-border py-8">
         <div className="mx-auto max-w-5xl px-6">
           <p className="font-mono text-xs text-muted-foreground">
-            AI Workflow Hub — free for personal & commercial use
+            © {new Date().getFullYear()} Donkm Tech Private Limited — B2B workflow JSON API
           </p>
         </div>
       </footer>
+
     </div>
   );
 }
