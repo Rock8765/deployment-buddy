@@ -92,26 +92,20 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto max-w-6xl px-6 py-10">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 text-center">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                🤖 AI Workflow Hub
-              </h1>
-            </div>
-            <div className="flex shrink-0 flex-col items-end gap-2 text-sm">
-              <Link
-                to="/guide"
-                className="rounded-lg border border-border px-3 py-1.5 font-medium transition-colors hover:border-ring hover:text-primary"
-              >
-                📘 Guide
-              </Link>
-            </div>
-          </div>
+      <PortalHeader />
+
+      <div className="border-b border-border bg-card">
+        <div className="mx-auto max-w-6xl px-6 py-10 text-center">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            B2B Workflow JSON API Library
+          </h1>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Production-ready n8n automation blueprints, delivered as clean JSON by Donkm Tech
+            Private Limited — ready to import into your own n8n environment.
+          </p>
         </div>
-      </header>
+      </div>
+
 
       <main className="mx-auto max-w-6xl px-6 py-8">
         {/* Stats */}
