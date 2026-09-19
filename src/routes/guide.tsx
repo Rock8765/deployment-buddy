@@ -32,15 +32,16 @@ function GuidePage() {
 
 
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">Guide</p>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">Documentation</p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-          How to use the workflows
+          How to use the workflow blueprints
         </h1>
         <p className="mt-4 leading-relaxed text-muted-foreground">
-          AI Workflow Hub is a collection of free n8n AI automation workflows designed to help
-          developers, businesses and automation enthusiasts leverage the power of AI. Every
-          workflow is ready to import into your self-hosted n8n instance.
+          Donkm Tech Private Limited maintains a B2B library of n8n automation blueprints delivered
+          as clean JSON. Each blueprint is ready to import into your own n8n environment and adapt
+          to your business processes.
         </p>
+
 
         <Section title="Step by step">
           <ol className="grid gap-4">
