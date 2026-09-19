@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as WorkflowsIdRouteImport } from './routes/workflows/$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const GuideRoute = GuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkflowsIdRoute = WorkflowsIdRouteImport.update({
   id: '/workflows/$id',
   path: '/workflows/$id',
@@ -32,30 +38,34 @@ const WorkflowsIdRoute = WorkflowsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/guide': typeof GuideRoute
+  '/login': typeof LoginRoute
   '/workflows/$id': typeof WorkflowsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/guide': typeof GuideRoute
+  '/login': typeof LoginRoute
   '/workflows/$id': typeof WorkflowsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/guide': typeof GuideRoute
+  '/login': typeof LoginRoute
   '/workflows/$id': typeof WorkflowsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/guide' | '/workflows/$id'
+  fullPaths: '/' | '/guide' | '/login' | '/workflows/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/guide' | '/workflows/$id'
-  id: '__root__' | '/' | '/guide' | '/workflows/$id'
+  to: '/' | '/guide' | '/login' | '/workflows/$id'
+  id: '__root__' | '/' | '/guide' | '/login' | '/workflows/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GuideRoute: typeof GuideRoute
+  LoginRoute: typeof LoginRoute
   WorkflowsIdRoute: typeof WorkflowsIdRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workflows/$id': {
       id: '/workflows/$id'
       path: '/workflows/$id'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GuideRoute: GuideRoute,
+  LoginRoute: LoginRoute,
   WorkflowsIdRoute: WorkflowsIdRoute,
 }
 export const routeTree = rootRouteImport
