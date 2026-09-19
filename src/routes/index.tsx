@@ -284,7 +284,7 @@ function Select({
   );
 }
 
-function WorkflowCard({ w }: { w: WorkflowMeta }) {
+function WorkflowCard({ w, catLabel }: { w: WorkflowMeta; catLabel: string }) {
   return (
     <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between gap-2">
