@@ -2,28 +2,32 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { fetchIndex, type WorkflowMeta } from "@/lib/workflows";
+import { requirePortalAccess } from "@/lib/auth.functions";
+import { PortalHeader } from "@/components/PortalHeader";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => requirePortalAccess(),
   component: Index,
   head: () => ({
     meta: [
-      { title: "AI Workflow Hub — 2000+ Free n8n Automation Workflows" },
+      { title: "Workflow Library — Donkm Tech Private Limited" },
       {
         name: "description",
         content:
-          "Browse, search and copy 2000+ ready-to-import n8n automation workflows. AI agents, email, e-commerce, CRM, scraping and more.",
+          "Browse and copy 2000+ production-ready n8n workflow JSON blueprints from the Donkm Tech B2B automation API library.",
       },
-      { property: "og:title", content: "AI Workflow Hub — 2000+ Free n8n Automation Workflows" },
+      { property: "og:title", content: "Workflow Library — Donkm Tech Private Limited" },
       {
         property: "og:description",
         content:
-          "Search 2000+ ready-to-import n8n automation workflows — AI agents, email, e-commerce, CRM, scraping and more.",
+          "2000+ production-ready n8n workflow JSON blueprints — AI, data, CRM, e-commerce and operations automation for B2B teams.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
+
 
 const PAGE_SIZE = 12;
 
