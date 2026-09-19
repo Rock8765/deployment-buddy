@@ -2,24 +2,32 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { buildDetail, fetchIndex, fetchWorkflowFile, shortNodeType } from "@/lib/workflows";
+import { requirePortalAccess } from "@/lib/auth.functions";
+import { PortalHeader } from "@/components/PortalHeader";
 
 export const Route = createFileRoute("/workflows/$id")({
+  beforeLoad: () => requirePortalAccess(),
   component: WorkflowDetailPage,
   head: () => ({
     meta: [
-      { title: "Workflow — AI Workflow Hub" },
+      { title: "Workflow Blueprint — Donkm Tech Private Limited" },
       {
         name: "description",
-        content: "View and copy this ready-to-import n8n workflow JSON from AI Workflow Hub.",
+        content:
+          "View and copy this production-ready n8n workflow JSON blueprint from the Donkm Tech B2B automation library.",
       },
-      { property: "og:title", content: "Workflow — AI Workflow Hub" },
+      { property: "og:title", content: "Workflow Blueprint — Donkm Tech Private Limited" },
       {
         property: "og:description",
-        content: "View and copy this ready-to-import n8n workflow JSON from AI Workflow Hub.",
+        content:
+          "View and copy this production-ready n8n workflow JSON blueprint from the Donkm Tech B2B automation library.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
+
 
 function WorkflowDetailPage() {
   const { id } = Route.useParams();
