@@ -10,7 +10,13 @@ function sessionConfig() {
     password: process.env["SESSION_SECRET"]!,
     name: "donkm-portal",
     maxAge: 60 * 60 * 24 * 7,
-    cookie: { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" },
+    cookie: {
+      httpOnly: true,
+      secure: process.env["NODE_ENV"] === "production",
+      sameSite: "lax" as const,
+      path: "/",
+    },
+
   };
 }
 
@@ -51,8 +57,11 @@ export const getSessionState = createServerFn({ method: "GET" }).handler(async (
   };
 });
 
-export const requirePortalAccess = createServerFn({ method: "GET" }).handler(async () => {
-  const session = await useSession<PortalSession>(sessionConfig());
-  if (!session.data.unlocked) throw redirect({ to: "/login" });
-  return { email: session.data.email ?? null };
-});
+// Plain helper (not a server fn): a redirect thrown across the RPC boundary
+// surfaces as "Error: [object Response]". Throw it locally in beforeLoad instead.
+export async function requirePortalAccess() {
+  const state = await getSessionState();
+  if (!state.unlocked) throw redirect({ to: "/login" });
+  return { email: state.email };
+}
+
