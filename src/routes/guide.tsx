@@ -1,20 +1,23 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { requirePortalAccess } from "@/lib/auth.functions";
+import { PortalHeader } from "@/components/PortalHeader";
 
 export const Route = createFileRoute("/guide")({
+  beforeLoad: () => requirePortalAccess(),
   component: GuidePage,
   head: () => ({
     meta: [
-      { title: "How to Use — AI Workflow Hub" },
+      { title: "Documentation — Donkm Tech Private Limited" },
       {
         name: "description",
         content:
-          "Step-by-step guide: copy a workflow JSON, import it into your n8n dashboard, set up credentials and activate your automation.",
+          "Integration documentation for the Donkm Tech B2B workflow JSON API: import blueprints into n8n, configure credentials and activate automations.",
       },
-      { property: "og:title", content: "How to Use — AI Workflow Hub" },
+      { property: "og:title", content: "Documentation — Donkm Tech Private Limited" },
       {
         property: "og:description",
         content:
-          "Step-by-step guide: copy a workflow JSON, import it into your n8n dashboard, set up credentials and activate your automation.",
+          "Integration documentation for the Donkm Tech B2B workflow JSON API built on n8n.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -25,28 +28,8 @@ export const Route = createFileRoute("/guide")({
 function GuidePage() {
   return (
     <div className="min-h-screen">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary font-mono text-sm font-medium text-primary-foreground">
-              n8
-            </span>
-            <span className="text-sm font-semibold tracking-tight">AI Workflow Hub</span>
-          </Link>
-          <nav className="flex items-center gap-5 text-sm text-muted-foreground">
-            <Link to="/" className="transition-colors hover:text-foreground">
-              All workflows
-            </Link>
-            <a
-              href="/AI-Workflow-Hub-2000.zip"
-              download
-              className="transition-colors hover:text-foreground"
-            >
-              Download all ⤓
-            </a>
-          </nav>
-        </div>
-      </header>
+      <PortalHeader />
+
 
       <main className="mx-auto max-w-3xl px-6 py-10">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">Guide</p>
