@@ -1,6 +1,8 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import logo from "@/assets/donkm-logo.jpg.asset.json";
+import { signOut as signOutFn } from "@/lib/auth.functions";
+
 
 export function PortalHeader() {
   const router = useRouter();
