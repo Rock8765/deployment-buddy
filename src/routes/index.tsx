@@ -96,11 +96,6 @@ function Index() {
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 🤖 AI Workflow Hub
               </h1>
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-sm text-muted-foreground">
-                <span>✅ Completely Free</span>
-                <span>🚀 Ready to Import</span>
-                <span>🤖 AI Powered</span>
-              </div>
             </div>
             <div className="flex shrink-0 flex-col items-end gap-2 text-sm">
               <Link
