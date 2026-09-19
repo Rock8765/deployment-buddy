@@ -233,7 +233,7 @@ function Stat({
   tone,
 }: {
   icon: string;
-  value?: number;
+  value: number | undefined;
   label: string;
   tone: string;
 }) {
