@@ -10,12 +10,15 @@ function sessionConfig() {
     password: process.env["SESSION_SECRET"]!,
     name: "donkm-portal",
     maxAge: 60 * 60 * 24 * 7,
+    // Preview renders inside a cross-site iframe, so the session cookie needs
+    // SameSite=None; Secure to be sent at all (localhost counts as secure).
     cookie: {
       httpOnly: true,
-      secure: process.env["NODE_ENV"] === "production",
-      sameSite: "lax" as const,
+      secure: true,
+      sameSite: "none" as const,
       path: "/",
     },
+
 
   };
 }
