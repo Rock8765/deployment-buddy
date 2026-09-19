@@ -2,28 +2,32 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { fetchIndex, type WorkflowMeta } from "@/lib/workflows";
+import { requirePortalAccess } from "@/lib/auth.functions";
+import { PortalHeader } from "@/components/PortalHeader";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => requirePortalAccess(),
   component: Index,
   head: () => ({
     meta: [
-      { title: "AI Workflow Hub — 2000+ Free n8n Automation Workflows" },
+      { title: "Workflow Library — Donkm Tech Private Limited" },
       {
         name: "description",
         content:
-          "Browse, search and copy 2000+ ready-to-import n8n automation workflows. AI agents, email, e-commerce, CRM, scraping and more.",
+          "Browse and copy 2000+ production-ready n8n workflow JSON blueprints from the Donkm Tech B2B automation API library.",
       },
-      { property: "og:title", content: "AI Workflow Hub — 2000+ Free n8n Automation Workflows" },
+      { property: "og:title", content: "Workflow Library — Donkm Tech Private Limited" },
       {
         property: "og:description",
         content:
-          "Search 2000+ ready-to-import n8n automation workflows — AI agents, email, e-commerce, CRM, scraping and more.",
+          "2000+ production-ready n8n workflow JSON blueprints — AI, data, CRM, e-commerce and operations automation for B2B teams.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
+
 
 const PAGE_SIZE = 12;
 
@@ -88,26 +92,20 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto max-w-6xl px-6 py-10">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 text-center">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                🤖 AI Workflow Hub
-              </h1>
-            </div>
-            <div className="flex shrink-0 flex-col items-end gap-2 text-sm">
-              <Link
-                to="/guide"
-                className="rounded-lg border border-border px-3 py-1.5 font-medium transition-colors hover:border-ring hover:text-primary"
-              >
-                📘 Guide
-              </Link>
-            </div>
-          </div>
+      <PortalHeader />
+
+      <div className="border-b border-border bg-card">
+        <div className="mx-auto max-w-6xl px-6 py-10 text-center">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            B2B Workflow JSON API Library
+          </h1>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Production-ready n8n automation blueprints, delivered as clean JSON by Donkm Tech
+            Private Limited — ready to import into your own n8n environment.
+          </p>
         </div>
-      </header>
+      </div>
+
 
       <main className="mx-auto max-w-6xl px-6 py-8">
         {/* Stats */}
@@ -203,11 +201,12 @@ function Index() {
 }
 
 const TONES: Record<string, string> = {
-  blue: "bg-blue-50 border-blue-100 text-blue-600",
-  green: "bg-emerald-50 border-emerald-100 text-emerald-600",
-  purple: "bg-purple-50 border-purple-100 text-purple-600",
-  orange: "bg-orange-50 border-orange-100 text-orange-600",
+  blue: "bg-secondary border-border text-primary",
+  green: "bg-accent border-border text-accent-foreground",
+  purple: "bg-secondary border-border text-primary",
+  orange: "bg-accent border-border text-accent-foreground",
 };
+
 
 function Stat({
   icon,
@@ -273,7 +272,7 @@ function WorkflowCard({ w, catLabel }: { w: WorkflowMeta; catLabel: string }) {
           </span>
         </span>
         {w.active && (
-          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600">
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
             ✅ Active
           </span>
         )}

@@ -77,28 +77,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AI Workflow Hub — 2000+ Free n8n Automation Workflows" },
+      { title: "Donkm Tech Private Limited — B2B n8n Workflow JSON API" },
       {
         name: "description",
         content:
-          "Browse, search and copy 2000+ ready-to-import n8n automation workflows. AI agents, email, e-commerce, CRM, scraping and more — free for your self-hosted n8n instance.",
+          "Donkm Tech Private Limited delivers a B2B JSON workflow API built on n8n: 2000+ production-ready automation blueprints for AI, data, CRM, e-commerce and operations teams.",
       },
-      { property: "og:title", content: "AI Workflow Hub — 2000+ Free n8n Automation Workflows" },
+      { property: "og:title", content: "Donkm Tech Private Limited — B2B n8n Workflow JSON API" },
       {
         property: "og:description",
         content:
-          "Browse, search and copy 2000+ ready-to-import n8n automation workflows — AI agents, email, e-commerce, CRM, scraping and more.",
+          "B2B JSON workflow API built on n8n — 2000+ production-ready automation blueprints for enterprise teams.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
